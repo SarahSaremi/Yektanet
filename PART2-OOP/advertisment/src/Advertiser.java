@@ -2,6 +2,8 @@
 public class Advertiser extends BaseAdvertising{
     private String name;
     private static int totalClicks = 0;
+    private static final String help = "--- Advertiser Help ---\nid -> A unique integer number for each advertiser. \nname -> A string representing advertiser's name. \nclick -> Total number of clicks of each advertiser. \nviews -> Total number of views of each advertiser.\n";
+    private static final String description = "--- Advertiser Class Description ---\nEach object of this class represents an advertiser. \nAn advertiser can own multiple ads in the system.\n";
 
     public Advertiser(int id, String name) {
         super(id);
@@ -9,7 +11,6 @@ public class Advertiser extends BaseAdvertising{
     }
 
     public String getName() {
-        System.out.println("Advertiser--getName: " + name);
         return name;
     }
 
@@ -17,8 +18,12 @@ public class Advertiser extends BaseAdvertising{
         this.name = name;
     }
 
-    public static void help(){
-        //TODO: return string
+    public static String help(){
+        return help;
+    }
+
+    public static String describeMe() {
+        return description;
     }
 
     public void incClicks() {
@@ -27,7 +32,6 @@ public class Advertiser extends BaseAdvertising{
     }
 
     public static int getTotalClicks() {
-        System.out.println("Advertiser--getTotalClicks: " + totalClicks);
         return totalClicks;
     }
 }

@@ -3,6 +3,7 @@ public class Ad extends BaseAdvertising{
     private String imgURL;
     private String link;
     private Advertiser advertiser;
+    private static final String description = "--- Ad Class Description ---\nEach object of this class represents an advertisement. \nAn advertisement contains a title, image and a link to advertiser's source.\n";
 
     public Ad(int id, String title, String imgURL, String link, Advertiser advertiser) {
         super(id);
@@ -48,6 +49,15 @@ public class Ad extends BaseAdvertising{
 
     public void setAdvertiser(Advertiser advertiser) {
         this.advertiser = advertiser;
+    }
+
+    // Not included in the instructions.
+    public Advertiser getAdvertiser() {
+        return advertiser;
+    }
+
+    public static String describeMe() {
+        return description;
     }
 
 }

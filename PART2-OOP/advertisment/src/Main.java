@@ -7,12 +7,11 @@ public class Main {
 
         Ad ad1 = new Ad(1, "title1", "img-url1", "link1", advertiser1);
         Ad ad2 = new Ad(2, "title2", "img-url2", "link2", advertiser2);
-        Ad ad3 = new Ad(3, "title3", "img-url3", "link3", advertiser2);
 
-        baseAdvertising.describeMe();
-        advertiser1.describeMe();
 
-        ad1.incViews();
+        System.out.println(baseAdvertising.describeMe());
+        System.out.println(ad2.describeMe());
+
         ad1.incViews();
         ad1.incViews();
         ad1.incViews();
@@ -21,25 +20,17 @@ public class Main {
 
         ad1.incClicks();
         ad1.incClicks();
-
         ad2.incClicks();
 
-        ad3.incClicks();
-        ad3.incClicks();
-        ad3.incClicks();
-
-        advertiser2.getName();
+        System.out.println(advertiser2.getName());
         advertiser2.setName("new name");
-        advertiser2.getName();
+        System.out.println(advertiser2.getName());
 
-        ad1.getClicks();
-        ad2.getClicks();
-        ad3.getClicks();
 
-        advertiser1.getClicks();
-        advertiser2.getClicks();
+        System.out.println(ad1.getClicks());
+        System.out.println(advertiser2.getClicks());
+        System.out.println(Advertiser.getTotalClicks());
+        System.out.println(Advertiser.help());
 
-        Advertiser.getTotalClicks();
-        Advertiser.help();
     }
 }
