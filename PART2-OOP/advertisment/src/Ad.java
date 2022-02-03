@@ -37,11 +37,14 @@ public class Ad extends BaseAdvertising{
         this.link = link;
     }
 
+
+    @Override
     public void incClicks() {
         super.incClicks();
         this.advertiser.incClicks();
     }
 
+    @Override
     public void incViews() {
         super.incViews();
         this.advertiser.incViews();

@@ -26,6 +26,7 @@ public class Advertiser extends BaseAdvertising{
         return description;
     }
 
+    @Override
     public void incClicks() {
         super.incClicks();
         totalClicks += 1;
