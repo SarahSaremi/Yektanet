@@ -21,7 +21,8 @@ class BaseAdvertising:
     def inc_clicks(self):
         self.__clicks += 1
 
-    def describe_me(self):
-        return self.__doc__
+    @classmethod
+    def describe_me(cls):
+        return cls.__doc__
 
 

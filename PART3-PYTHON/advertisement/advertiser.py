@@ -29,16 +29,13 @@ class Advertiser(BaseAdvertising):
         views -> Total number of views of each advertiser.\n
         """
 
-    def describe_me(self):
-        return self.__doc__
-
     def inc_clicks(self):
         super().inc_clicks()
         Advertiser.__total_clicks += 1
 
-    @staticmethod
-    def get_total_clicks():
-        return Advertiser.__total_clicks
+    @classmethod
+    def get_total_clicks(cls):
+        return cls.__total_clicks
 
 
 

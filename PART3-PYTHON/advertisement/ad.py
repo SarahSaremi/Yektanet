@@ -38,9 +38,6 @@ class Ad (BaseAdvertising):
     def set_advertiser(self, advertiser):
         self.__advertiser = advertiser
 
-    def describe_me(self):
-        return self.__doc__
-
     def inc_clicks(self):
         super().inc_clicks()
         self.__advertiser.inc_clicks()
@@ -48,6 +45,3 @@ class Ad (BaseAdvertising):
     def inc_views(self):
         super().inc_views()
         self.__advertiser.inc_views()
-
-    def get_total_clicks(self):
-        return self.total_clicks
