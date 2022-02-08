@@ -67,5 +67,5 @@ def find_view_click_difference(all_clicks, all_views):
             diff_sum += time_difference.total_seconds()
 
     average_diff = diff_sum / all_clicks.count()
-    average_diff /= 60
+    average_diff /= 3600
     return average_diff
