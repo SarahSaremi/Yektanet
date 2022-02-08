@@ -1,10 +1,11 @@
 from datetime import datetime
 
+from django.shortcuts import get_object_or_404
 from django.utils import timezone
 
 from django.db.models import Count
 from django.db.models.functions import TruncHour
-from django.views.generic import TemplateView
+from django.views.generic import TemplateView, RedirectView
 
 from ad_system.models import Advertiser, Click, View, Ad
 
@@ -19,13 +20,16 @@ class AdsView(TemplateView):
         return context
 
 
-class AdDetailsView(TemplateView):
-    template_name = 'ad_system/ad_details.html'
-    ads = Ad.objects.all()
+class AdRedirectView(RedirectView):
 
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        return context
+    permanent = False
+    query_string = True
+
+    def get_redirect_url(self, *args, **kwargs):
+        ad = get_object_or_404(Ad, pk=kwargs['ad_id'])
+        new_click = Click(ad=ad, action_time=timezone.now(), user_ip='0.0.0.0')
+        new_click.save()
+        return super().get_redirect_url(*args, **kwargs)
 
 
 class ReportView(TemplateView):

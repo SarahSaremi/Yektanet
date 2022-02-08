@@ -28,9 +28,9 @@ class BaseStat(models.Model):
 
 class Click(BaseStat):
     def __str__(self):
-        return f'{self.ad_id.ad_title} clicked.'
+        return f'{self.ad.title} clicked.'
 
 
 class View(BaseStat):
     def __str__(self):
-        return f'{self.ad_id.ad_title} viewed.'
+        return f'{self.ad.title} viewed.'
