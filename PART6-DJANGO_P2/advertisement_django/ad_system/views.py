@@ -41,8 +41,8 @@ class ReportView(TemplateView):
 
         click_view_diff = find_view_click_difference(all_clicks, all_views)
 
-        click_report = list(all_clicks.values('ad_id').annotate(action_hour=TruncHour('action_time')).annotate(repeat=Count('action_hour')).values('ad_id', 'action_hour', 'repeat').order_by('ad_id'))
-        view_report = list(all_views.values('ad_id').annotate(action_hour=TruncHour('action_time')).annotate(repeat=Count('action_hour')).values('ad_id', 'action_hour', 'repeat').order_by('ad_id'))
+        click_report = list(all_clicks.values('ad').annotate(action_hour=TruncHour('action_time')).annotate(repeat=Count('action_hour')).values('ad_id', 'action_hour', 'repeat').order_by('ad'))
+        view_report = list(all_views.values('ad').annotate(action_hour=TruncHour('action_time')).annotate(repeat=Count('action_hour')).values('ad_id', 'action_hour', 'repeat').order_by('ad'))
 
         context = super().get_context_data(**kwargs)
         context['click_rate'] = click_rate
