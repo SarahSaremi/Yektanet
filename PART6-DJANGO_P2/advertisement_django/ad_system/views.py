@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from django.utils import timezone
 
 from django.db.models import Count
@@ -36,13 +38,11 @@ class ReportView(TemplateView):
         click_rate = 0
         if all_views.count() != 0:
             click_rate = all_clicks.count() / all_views.count()
+
         click_view_diff = find_view_click_difference(all_clicks, all_views)
-        click_report = all_clicks.annotate(action_hour=TruncHour('action_time')).values('action_hour')
-        click_report = click_report.annotate(repeat=Count('action_hour')).values('action_hour', 'repeat')
-        click_report = list(click_report.order_by('action_hour'))
-        click_report = all_clicks.annotate(ad_title=Count('ad_id'))
-        click_report = click_report[3].ad_title
-        view_report = all_views.annotate()
+
+        click_report = list(all_clicks.values('ad_id').annotate(action_hour=TruncHour('action_time')).annotate(repeat=Count('action_hour')).values('ad_id', 'action_hour', 'repeat').order_by('ad_id'))
+        view_report = list(all_views.values('ad_id').annotate(action_hour=TruncHour('action_time')).annotate(repeat=Count('action_hour')).values('ad_id', 'action_hour', 'repeat').order_by('ad_id'))
 
         context = super().get_context_data(**kwargs)
         context['click_rate'] = click_rate
@@ -55,16 +55,17 @@ class ReportView(TemplateView):
 
 def find_view_click_difference(all_clicks, all_views):
 
-    diff_sum = timezone.now()
+    diff_sum = 0
     if all_clicks.count() == 0 or all_views.count() == 0:
         return diff_sum
 
     for click in all_clicks.all():
         related_views = all_views.filter(user_ip=click.user_ip, action_time__lt=click.action_time, ad_id=click.ad_id)
         if related_views.count() != 0:
-            view = related_views.order_by('action_time')[0]
+            view = related_views.order_by('-action_time')[0]
             time_difference = click.action_time - view.action_time
-            diff_sum += time_difference
+            diff_sum += time_difference.total_seconds()
 
-    average_diff = diff_sum/all_clicks.count()
+    average_diff = diff_sum / all_clicks.count()
+    average_diff /= 60
     return average_diff

@@ -7,12 +7,19 @@
 <body>
     <div>click_rate: {{ click_rate }}</div>
     <div>click_view_diff: {{ click_view_diff }}</div>
-    <div>click_report: {{ click_report }}</div>
-    <div>view_report: {{ view_report }}</div>
-{#    {% for ad in advertiser.ad_set.all %}#}
-{#        <div class="card col-md-2 p-0 mx-2">#}
-{##}
-{#        </div>#}
-{#    {% endfor %}#}
+    <h4>click_report:</h4>
+    {% for click in click_report %}
+        <h5>AD ID: {{ click.ad_id }}</h5>
+        <div>ACTION HOUR: {{ click.action_hour }}</div>
+        <div>AMOUNT OF CLICKS: {{ click.repeat }}</div>
+        <div>-------------------------------------</div>
+    {% endfor %}
+    <h4>view_report:</h4>
+    {% for view in view_report %}
+        <h5>AD ID: {{ view.ad_id }}</h5>
+        <div>ACTION HOUR: {{ view.action_hour }}</div>
+        <div>AMOUNT OF VIEWS: {{ view.repeat }}</div>
+        <div>-------------------------------------</div>
+    {% endfor %}
 </body>
 </html>
