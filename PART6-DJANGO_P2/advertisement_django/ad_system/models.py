@@ -10,10 +10,11 @@ class Advertiser(models.Model):
 
 
 class Ad(models.Model):
-    ad_title = models.CharField(max_length=100)
+    ad_title = models.CharField(max_length=50)
     ad_link = models.CharField(max_length=200)
     ad_image_url = models.CharField(max_length=200)
     advertiser_id = models.ForeignKey(Advertiser, on_delete=models.CASCADE) # TODO on delete
+    is_approved = models.BooleanField(default=False)
 
     def __str__(self):
         return f'Ad {self.ad_title} by {self.advertiser_id.advertiser_name}.'
@@ -27,9 +28,9 @@ class BaseClicksAndView(models.Model):
 
 class Click(BaseClicksAndView):
     def __str__(self):
-        return f'{self.ad.ad_title} clicked.'
+        return f'{self.ad_id.ad_title} clicked.'
 
 
 class View(BaseClicksAndView):
     def __str__(self):
-        return f'{self.ad.ad_title} viewed.'
+        return f'{self.ad_id.ad_title} viewed.'
