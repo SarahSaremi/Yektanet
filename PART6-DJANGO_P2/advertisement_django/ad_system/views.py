@@ -27,9 +27,9 @@ class AdRedirectView(RedirectView):
 
     def get_redirect_url(self, *args, **kwargs):
         ad = get_object_or_404(Ad, pk=kwargs['ad_id'])
-        new_click = Click(ad=ad, action_time=timezone.now(), user_ip='0.0.0.0')
+        new_click = Click(ad=ad, action_time=timezone.now(), user_ip=self.request.ip_addr)
         new_click.save()
-        return super().get_redirect_url(*args, **kwargs)
+        return ad.link
 
 
 class ReportView(TemplateView):

@@ -11,8 +11,8 @@ class Advertiser(models.Model):
 
 class Ad(models.Model):
     title = models.CharField(max_length=50)
-    link = models.URLField(default='https://www.yektanet.com/')
-    image_url = models.URLField(default='https://www.google.com/url?sa=i&url=https%3A%2F%2Fdribbble.com%2Ftags%2Fsimple_404_ui&psig=AOvVaw2Xw5ajRRPMYSrBHmBgbg1O&ust=1644413807944000&source=images&cd=vfe&ved=0CAsQjRxqFwoTCICN5vmc8PUCFQAAAAAdAAAAABAD')
+    link = models.URLField()
+    image_url = models.URLField()
     advertiser = models.ForeignKey(Advertiser, on_delete=models.CASCADE)  # TODO on delete
     is_approved = models.BooleanField(default=False)
 
