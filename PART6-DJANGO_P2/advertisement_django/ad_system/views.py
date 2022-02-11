@@ -6,18 +6,30 @@ from django.utils import timezone
 from django.db.models import Count
 from django.db.models.functions import TruncHour
 from django.views.generic import TemplateView, RedirectView
+from rest_framework.generics import ListAPIView
+from rest_framework.permissions import IsAuthenticated, AllowAny, IsAdminUser
+from rest_framework.authentication import TokenAuthentication
+from rest_framework.renderers import TemplateHTMLRenderer
+from rest_framework.response import Response
 
-from ad_system.models import Advertiser, Click, View, Ad
+from ad_system.models import Advertiser, Click, View, Ad, AdvertiserSerializer, AdSerializer
 
 
-class AdsView(TemplateView):
+class AdsView(ListAPIView):
     template_name = 'ad_system/ads.html'
+    serializer_class = AdvertiserSerializer
+    renderer_classes = [TemplateHTMLRenderer]
     advertisers = Advertiser.objects.all()
 
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['advertisers'] = AdsView.advertisers
-        return context
+    def get(self, request, *args, **kwargs):
+
+        ads = Ad.objects.all()
+        for ad in ads:
+            new_view = View(user_ip=self.request.ip_addr, action_time=timezone.now(), ad=ad)
+            new_view.save()
+
+        context = {'advertisers': AdsView.advertisers}
+        return Response(context)
 
 
 class AdRedirectView(RedirectView):
@@ -32,10 +44,12 @@ class AdRedirectView(RedirectView):
         return ad.link
 
 
-class ReportView(TemplateView):
-    template_name = 'ad_system/report.html'
+class ReportView(ListAPIView):
+    template_name = 'templates/ad_system/report.html'
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [AllowAny]
 
-    def get_context_data(self, **kwargs):
+    def get(self, request, *args, **kwargs):
         all_clicks = Click.objects
         all_views = View.objects
 
@@ -48,13 +62,12 @@ class ReportView(TemplateView):
         click_report = list(all_clicks.values('ad').annotate(action_hour=TruncHour('action_time')).annotate(repeat=Count('action_hour')).values('ad_id', 'action_hour', 'repeat').order_by('ad'))
         view_report = list(all_views.values('ad').annotate(action_hour=TruncHour('action_time')).annotate(repeat=Count('action_hour')).values('ad_id', 'action_hour', 'repeat').order_by('ad'))
 
-        context = super().get_context_data(**kwargs)
-        context['click_rate'] = click_rate
-        context['click_view_diff'] = click_view_diff
-        context['click_report'] = click_report
-        context['view_report'] = view_report
-
-        return context
+        context = {'click_rate': click_rate,
+                   'click_view_diff': click_view_diff,
+                   'click_report': click_report,
+                   'view_report': view_report}
+        
+        return Response(context)
 
 
 def find_view_click_difference(all_clicks, all_views):
@@ -73,3 +86,5 @@ def find_view_click_difference(all_clicks, all_views):
     average_diff = diff_sum / all_clicks.count()
     average_diff /= 3600
     return average_diff
+
+
