@@ -11,6 +11,7 @@ from rest_framework.permissions import IsAuthenticated, AllowAny, IsAdminUser
 from rest_framework.authentication import TokenAuthentication
 from rest_framework.renderers import TemplateHTMLRenderer
 from rest_framework.response import Response
+from rest_framework.viewsets import ModelViewSet
 
 from ad_system.models import Advertiser, Click, View, Ad, AdvertiserSerializer, AdSerializer
 
@@ -47,7 +48,7 @@ class AdRedirectView(RedirectView):
 class ReportView(ListAPIView):
     template_name = 'templates/ad_system/report.html'
     authentication_classes = [TokenAuthentication]
-    permission_classes = [AllowAny]
+    permission_classes = [IsAuthenticated]
 
     def get(self, request, *args, **kwargs):
         all_clicks = Click.objects
@@ -66,8 +67,46 @@ class ReportView(ListAPIView):
                    'click_view_diff': click_view_diff,
                    'click_report': click_report,
                    'view_report': view_report}
-        
+
         return Response(context)
+
+
+# ------- ViewSets -------
+class AdViewSet(ModelViewSet):
+    serializer_class = AdSerializer
+    queryset = Ad.objects.all()
+
+    def list(self, request):
+        serializer = AdSerializer(self.get_queryset())
+        return Response(serializer.data)
+
+    def create(self, request):
+        queryset = self.get_queryset()
+        queryset.create(request.data)
+
+    def retrieve(self, request, pk=None):
+        ad = get_object_or_404(self.get_queryset(), pk=pk)
+        serializer = AdSerializer(ad)
+        return Response(serializer.data)
+
+
+class AdvertiserViewSet(ModelViewSet):
+    serializer_class = AdvertiserSerializer
+    queryset = Advertiser.objects.all()
+
+    def list(self, request):
+        serializer = AdvertiserSerializer(self.get_queryset(), many=True)
+        return Response(serializer.data)
+
+    def create(self, request):
+        queryset = self.get_queryset()
+        queryset.create(request.data)
+        return Response()
+
+    def retrieve(self, request, pk=None):
+        ad = get_object_or_404(self.get_queryset(), pk=pk)
+        serializer = AdvertiserSerializer(ad)
+        return Response(serializer.data)
 
 
 def find_view_click_difference(all_clicks, all_views):

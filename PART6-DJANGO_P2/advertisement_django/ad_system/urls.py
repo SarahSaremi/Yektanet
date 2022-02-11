@@ -11,3 +11,9 @@ urlpatterns = [
     # path('api-token-auth/', auth_views.obtain_auth_token)
 ]
 
+router = DefaultRouter()
+router.register(r'ads', views.AdViewSet, basename='ad')
+router.register(r'advertisers', views.AdvertiserViewSet, basename='advertiser')
+urlpatterns += router.urls
+
+
