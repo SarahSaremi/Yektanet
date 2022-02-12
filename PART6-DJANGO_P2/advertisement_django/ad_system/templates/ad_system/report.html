@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Report</title>
+</head>
+<body>
+    <div>click_rate: {{ click_rate }}</div>
+    <div>click_view_diff: {{ click_view_diff }}</div>
+    <h4>click_report:</h4>
+    {% for click in click_report %}
+        <h5>AD ID: {{ click.ad_id }}</h5>
+        <div>ACTION HOUR: {{ click.action_hour }}</div>
+        <div>AMOUNT OF CLICKS: {{ click.repeat }}</div>
+        <div>-------------------------------------</div>
+    {% endfor %}
+    <h4>view_report:</h4>
+    {% for view in view_report %}
+        <h5>AD ID: {{ view.ad_id }}</h5>
+        <div>ACTION HOUR: {{ view.action_hour }}</div>
+        <div>AMOUNT OF VIEWS: {{ view.repeat }}</div>
+        <div>-------------------------------------</div>
+    {% endfor %}
+</body>
+</html>
