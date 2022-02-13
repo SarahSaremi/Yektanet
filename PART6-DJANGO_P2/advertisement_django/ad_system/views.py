@@ -49,7 +49,7 @@ class AdRedirectView(RedirectView):
 class ReportView(ListAPIView):
     template_name = 'templates/ad_system/report.html'
     authentication_classes = [TokenAuthentication]
-    permission_classes = [AllowAny]
+    permission_classes = [IsAuthenticated]
 
     def get(self, request, *args, **kwargs):
         all_clicks = Click.objects
