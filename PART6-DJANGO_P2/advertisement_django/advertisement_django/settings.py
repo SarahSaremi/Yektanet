@@ -13,6 +13,8 @@ https://docs.djangoproject.com/en/4.0/ref/settings/
 from pathlib import Path
 import KEY
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
+from advertisement_django.celery import app
+from celery.schedules import crontab
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -60,6 +62,22 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
+
+CELERY_BROKER_URL = 'amqp://localhost'
+CELERY_TIMEZONE = 'Iran'
+
+CELERY_BEAT_SCHEDULE = {
+
+    'task-every-hour': {
+       'task': 'ad_system.tasks.hourly_report',
+       'schedule': 3600.0,
+    },
+
+    'task-every-day': {
+         'task': 'ad_system.tasks.daily_report',
+         'schedule': 86400,
+    },
+}
 
 ROOT_URLCONF = 'advertisement_django.urls'
 
